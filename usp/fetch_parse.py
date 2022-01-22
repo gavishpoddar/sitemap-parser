@@ -42,6 +42,8 @@ from .web_client.requests_client import RequestsWebClient
 
 log = create_logger(__name__)
 
+class _Cache:
+    max_recursion_level = None
 
 class SitemapFetcher(object):
     """robots.txt / XML / plain text sitemap fetcher."""
@@ -51,19 +53,17 @@ class SitemapFetcher(object):
 
     Spec says it might be up to 50 MB but let's go for the full 100 MB here."""
 
-    __MAX_RECURSION_LEVEL = 10
-    """Max. recursion level in iterating over sub-sitemaps."""
 
-    __slots__ = [
-        '_url',
-        '_recursion_level',
-        '_web_client',
-    ]
+    def __init__(self, url: str, recursion_level: int, web_client: Optional[AbstractWebClient] = None, max_recursion_level=None):
 
-    def __init__(self, url: str, recursion_level: int, web_client: Optional[AbstractWebClient] = None):
+        if max_recursion_level is not None:
+            _Cache.max_recursion_level = max_recursion_level
 
-        if recursion_level > self.__MAX_RECURSION_LEVEL:
-            raise SitemapException("Recursion level exceeded {} for URL {}.".format(self.__MAX_RECURSION_LEVEL, url))
+        if _Cache.max_recursion_level is None:
+            _Cache.max_recursion_level = 3
+
+        if recursion_level > _Cache.max_recursion_level:
+            raise SitemapException("Recursion level exceeded {} for URL {}.".format(_Cache.max_recursion_level, url))
 
         if not is_http_url(url):
             raise SitemapException("URL {} is not a HTTP(s) URL.".format(url))
