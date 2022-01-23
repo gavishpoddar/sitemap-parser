@@ -1,7 +1,5 @@
 """Helpers to generate a sitemap tree."""
 
-from typing import Optional
-
 from .exceptions import SitemapException
 from .fetch_parse import SitemapFetcher
 from .helpers import is_http_url, strip_url_to_homepage
@@ -30,7 +28,7 @@ _UNPUBLISHED_SITEMAP_PATHS = {
 """Paths which are not exposed in robots.txt but might still contain a sitemap."""
 
 
-def sitemap_tree_for_homepage(homepage_url, max_recursion_level, web_client=None):
+def sitemap_tree_for_homepage(homepage_url, max_recursion_level, max_sitemap_size=10, web_client=None):
     """
     Using a homepage URL, fetch the tree of sitemaps and pages listed in them.
 
@@ -53,7 +51,7 @@ def sitemap_tree_for_homepage(homepage_url, max_recursion_level, web_client=None
 
     sitemaps = []
 
-    robots_txt_fetcher = SitemapFetcher(url=robots_txt_url, web_client=web_client, recursion_level=0, max_recursion_level=max_recursion_level)
+    robots_txt_fetcher = SitemapFetcher(url=robots_txt_url, web_client=web_client, recursion_level=0, max_recursion_level=max_recursion_level, max_sitemap_size=max_sitemap_size)
     robots_txt_sitemap = robots_txt_fetcher.sitemap()
     sitemaps.append(robots_txt_sitemap)
 
@@ -73,6 +71,7 @@ def sitemap_tree_for_homepage(homepage_url, max_recursion_level, web_client=None
                 web_client=web_client,
                 recursion_level=0,
                 max_recursion_level=max_recursion_level,
+                max_sitemap_size=max_sitemap_size,
             )
             unpublished_sitemap = unpublished_sitemap_fetcher.sitemap()
 
