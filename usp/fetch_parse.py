@@ -44,23 +44,23 @@ log = create_logger(__name__)
 
 class _Cache:
     max_recursion_level = None
+    max_sitemap_size = None
 
 class SitemapFetcher(object):
     """robots.txt / XML / plain text sitemap fetcher."""
 
-    __MAX_SITEMAP_SIZE = 100 * 1024 * 1024
-    """Max. uncompressed sitemap size.
-
-    Spec says it might be up to 50 MB but let's go for the full 100 MB here."""
-
-
-    def __init__(self, url: str, recursion_level: int, web_client: Optional[AbstractWebClient] = None, max_recursion_level=None):
+    def __init__(self, url: str, recursion_level: int, web_client: Optional[AbstractWebClient] = None, max_recursion_level=None, max_sitemap_size=None):
 
         if max_recursion_level is not None:
             _Cache.max_recursion_level = max_recursion_level
 
-        if _Cache.max_recursion_level is None:
-            _Cache.max_recursion_level = 3
+        if max_sitemap_size is not None:  
+            """
+            Max. uncompressed sitemap size.
+            Spec says it might be up to 50 MB but let's go for the full 100 MB here.
+            """
+            _Cache.max_sitemap_size = max_sitemap_size * 1024 * 1024
+
 
         if recursion_level > _Cache.max_recursion_level:
             raise SitemapException("Recursion level exceeded {} for URL {}.".format(_Cache.max_recursion_level, url))
@@ -71,7 +71,7 @@ class SitemapFetcher(object):
         if not web_client:
             web_client = RequestsWebClient()
 
-        web_client.set_max_response_data_length(self.__MAX_SITEMAP_SIZE)
+        web_client.set_max_response_data_length(_Cache.max_sitemap_size)
 
         self._url = url
         self._web_client = web_client
