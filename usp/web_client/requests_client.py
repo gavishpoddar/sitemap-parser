@@ -14,6 +14,9 @@ from .abstract_client import (
 )
 from usp.__about__ import __version__
 
+from faker import Faker
+fake = Faker()
+Faker.seed(0)
 
 class RequestsWebClientSuccessResponse(AbstractWebClientSuccessResponse):
     """
@@ -60,7 +63,7 @@ class RequestsWebClientErrorResponse(WebClientErrorResponse):
 class RequestsWebClient(AbstractWebClient):
     """requests-based web client to be used by the sitemap fetcher."""
 
-    __USER_AGENT = 'ultimate_sitemap_parser/{}'.format(__version__)
+    __USER_AGENT = fake.chrome()
 
     __HTTP_REQUEST_TIMEOUT = 60
     """
