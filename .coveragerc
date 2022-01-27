@@ -1,7 +1,0 @@
-[run]
-source = usp
-
-[report]
-omit =
-    */python?.?/*
-    tests/*
