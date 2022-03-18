@@ -4,6 +4,7 @@ from http import HTTPStatus
 from typing import Optional, Dict
 
 import requests
+import cloudscraper
 
 from .abstract_client import (
     AbstractWebClient,
@@ -107,7 +108,8 @@ class RequestsWebClient(AbstractWebClient):
 
     def get(self, url: str) -> AbstractWebClientResponse:
         try:
-            response = requests.get(
+            scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+            response = scraper.get(
                 url,
                 timeout=self.__timeout,
                 stream=True,
