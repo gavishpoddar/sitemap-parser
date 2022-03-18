@@ -17,5 +17,6 @@ setup(
         # Making HTTP requests
         'requests>=2.2.1',
         'Faker',
+        'cloudscraper',
     ],
 )
