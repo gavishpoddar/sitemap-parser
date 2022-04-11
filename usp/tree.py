@@ -28,7 +28,7 @@ _UNPUBLISHED_SITEMAP_PATHS = {
 """Paths which are not exposed in robots.txt but might still contain a sitemap."""
 
 
-def sitemap_tree_internal(homepage_url, max_recursion_level, max_sitemap_size=10, web_client=None):
+def sitemap_tree_for_homepage(homepage_url, max_recursion_level, max_sitemap_size=10, web_client=None):
     """
     Using a homepage URL, fetch the tree of sitemaps and pages listed in them.
 
