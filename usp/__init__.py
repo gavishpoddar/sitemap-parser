@@ -43,3 +43,4 @@ def sitemap_tree_for_homepage(*args, **kwargs):
         return_data = sitemap_tree_internal(*args)
 
     return return_data
+
