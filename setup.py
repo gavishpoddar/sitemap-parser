@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
-from usp.__about__ import __version__
 
+__version__ = "0.1"
 
 setup(
     name='sitemap-parser',
