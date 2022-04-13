@@ -13,7 +13,6 @@ from .abstract_client import (
     WebClientErrorResponse,
     RETRYABLE_HTTP_STATUS_CODES,
 )
-from usp.__about__ import __version__
 
 from faker import Faker
 fake = Faker()
